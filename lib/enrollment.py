@@ -14,6 +14,11 @@ class Student:
 
     def get_enrollments(self):
         return self._enrollments.copy()
+    def course_count(self):
+        return len(self._enrollments)
+    
+    def course_count(self):
+        return len(self._enrollments)
 
 class Course:
     def __init__(self, title):
@@ -45,3 +50,16 @@ class Enrollment:
 
     def get_enrollment_date(self):
         return self._enrollment_date
+    
+
+python = Course("Python Programming")
+js = Course("JavaScript Programming")
+
+student1= Student("Alice")
+student2= Student("Bob")
+
+student1.enroll(python)
+student1.enroll(js)
+student2.enroll(js) 
+print(f"{student1.name} is enrolled in {student1.course_count()} courses.")
+print(f"{student2.name} is enrolled in {student2.course_count()} courses.")
