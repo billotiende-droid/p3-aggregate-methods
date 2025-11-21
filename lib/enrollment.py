@@ -1,8 +1,10 @@
 from datetime import datetime
 class Student:
-    def __init__(self, name):
+    def __init__(self, name, grades=None):
         self.name = name
         self._enrollments = []
+        # Use a protected attribute _grades to match my method comment
+        self._grades = grades if grades is not None else {}
 
     def enroll(self, course):
         if isinstance(course, Course):
@@ -14,15 +16,22 @@ class Student:
 
     def get_enrollments(self):
         return self._enrollments.copy()
+
     def course_count(self):
         return len(self._enrollments)
-    
-    def course_count(self):
-        return len(self._enrollments)
+
+    def aggregate_average_grade(self):
+        """Calculates the average grade across all courses."""
+        if not self._grades:
+            return 0
+        total_grades = sum(self._grades.values())
+        num_courses = len(self._grades)
+        average_grade = total_grades / num_courses
+        return average_grade
+
 
 class Course:
     def __init__(self, title):
-
         self.title = title
         self._enrollments = []
 
@@ -38,7 +47,7 @@ class Course:
 
 class Enrollment:
     all = []
-    
+
     def __init__(self, student, course):
         if isinstance(student, Student) and isinstance(course, Course):
             self.student = student
@@ -50,16 +59,15 @@ class Enrollment:
 
     def get_enrollment_date(self):
         return self._enrollment_date
-    
+
     @classmethod
     def aggregate_enrollments_per_day(cls):
         enrollment_count = {}
         for enrollment in cls.all:
             date = enrollment.get_enrollment_date().date()
             enrollment_count[date] = enrollment_count.get(date, 0) + 1
-            
         return enrollment_count
-    
+
 
 
 
@@ -77,16 +85,25 @@ class Enrollment:
 # print(f"{student1.name} is enrolled in {student1.course_count()} courses.")
 # print(f"{student2.name} is enrolled in {student2.course_count()} courses.")
 
+# student1= Student("Alice")
+# student2= Student("Bob")
+
+# python = Course("Python Programming")
+# js = Course("JavaScript Programming")
+
+# student1.enroll(python)
+# student1.enroll(js)
+# student2.enroll(js)
+# student2.enroll(python)
+
+# results = Enrollment.aggregate_enrollments_per_day()
+# print(results)
+
 student1= Student("Alice")
 student2= Student("Bob")
 
-python = Course("Python Programming")
-js = Course("JavaScript Programming")
+student1._grades = {'Python Programming': 85, 'JavaScript Programming': 90}
+student2._grades = {'JavaScript Programming': 75, 'Python Programming': 80}
 
-student1.enroll(python)
-student1.enroll(js)
-student2.enroll(js)
-student2.enroll(python)
-
-results = Enrollment.aggregate_enrollments_per_day()
-print(results)
+print(f"{student1.name}'s average grade: {student1.aggregate_average_grade()}")
+print(f"{student2.name}'s average grade: {student2.aggregate_average_grade()}")
