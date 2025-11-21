@@ -51,15 +51,42 @@ class Enrollment:
     def get_enrollment_date(self):
         return self._enrollment_date
     
+    @classmethod
+    def aggregate_enrollments_per_day(cls):
+        enrollment_count = {}
+        for enrollment in cls.all:
+            date = enrollment.get_enrollment_date().date()
+            enrollment_count[date] = enrollment_count.get(date, 0) + 1
+            
+        return enrollment_count
+    
 
-python = Course("Python Programming")
-js = Course("JavaScript Programming")
+
+
+
+
+# python = Course("Python Programming")
+# js = Course("JavaScript Programming")
+
+# student1= Student("Alice")
+# student2= Student("Bob")
+
+# student1.enroll(python)
+# student1.enroll(js)
+# student2.enroll(js) 
+# print(f"{student1.name} is enrolled in {student1.course_count()} courses.")
+# print(f"{student2.name} is enrolled in {student2.course_count()} courses.")
 
 student1= Student("Alice")
 student2= Student("Bob")
 
+python = Course("Python Programming")
+js = Course("JavaScript Programming")
+
 student1.enroll(python)
 student1.enroll(js)
-student2.enroll(js) 
-print(f"{student1.name} is enrolled in {student1.course_count()} courses.")
-print(f"{student2.name} is enrolled in {student2.course_count()} courses.")
+student2.enroll(js)
+student2.enroll(python)
+
+results = Enrollment.aggregate_enrollments_per_day()
+print(results)
